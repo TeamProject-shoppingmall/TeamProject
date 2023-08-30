@@ -29,7 +29,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+//	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.named('test') {

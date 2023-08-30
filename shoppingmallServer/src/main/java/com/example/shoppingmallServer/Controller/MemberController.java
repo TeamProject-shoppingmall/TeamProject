@@ -1,5 +1,8 @@
 package com.example.shoppingmallServer.Controller;
 
+import com.example.shoppingmallServer.Dto.MemberDto;
+import com.example.shoppingmallServer.Entity.Member;
+import com.example.shoppingmallServer.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,10 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController{
+    private MemberService memberService;
 
     @PostMapping("/regularJoin")
-    public String regularJoin() {
-        return "home";
+    public String regularJoin(@RequestBody MemberDto memberDto) {
+        Member member = Member.createMember(memberDto);
+        memberService.regularJoin(member);
+        return "";
     }
 
     @PostMapping("/kakaoJoin")
