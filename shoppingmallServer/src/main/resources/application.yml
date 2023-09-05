@@ -29,3 +29,6 @@ springdoc:
       default-produces-media-type: application/json
       paths-to-match:
         - /**
+server:
+  tomcat:
+    max-http-header-size: 8192

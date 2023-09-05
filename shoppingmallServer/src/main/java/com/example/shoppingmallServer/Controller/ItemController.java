@@ -1,5 +1,6 @@
 package com.example.shoppingmallServer.Controller;
 
+import com.example.shoppingmallServer.Service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/item")
 public class ItemController {
+    private final ItemService itemService;
     @GetMapping("/best")
     public String bestItem() {
         return "home";

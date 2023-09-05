@@ -4,8 +4,10 @@ import com.example.shoppingmallServer.Dto.MemberDto;
 import com.example.shoppingmallServer.Enum.GenderEnum;
 import com.example.shoppingmallServer.Enum.MemberEnum;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Member {
     @Id
     @GeneratedValue
@@ -30,8 +32,11 @@ public class Member {
 
     private GenderEnum memberGender;
 
-    @Embedded
-    private Address address;
+    private String zipcode;
+
+    private String addr;
+
+    private String addrDetail;
 
     private Member(MemberDto memberDto) {
         this.regularMember = memberDto.getRegularMember();
@@ -42,8 +47,10 @@ public class Member {
         this.memberName = memberDto.getMemberName();
         this.memberEmail = memberDto.getMemberEmail();
         this.memberPhone = memberDto.getMemberPhone();
-        this.memberGender = memberDto.getMemberGender();
-        this.address = memberDto.getAddress();
+//        this.memberGender = memberDto.getMemberGender();
+        this.zipcode = memberDto.getZipcode();
+        this.addr = memberDto.getAddr();
+        this.addrDetail = memberDto.getAddrDetail();
     }
 
     public Member() {
@@ -51,6 +58,10 @@ public class Member {
     }
 
     public static Member createMember(MemberDto memberDto) {
+        return new Member(memberDto);
+    }
+
+    public static Member modifyMember(MemberDto memberDto) {
         return new Member(memberDto);
     }
 }
