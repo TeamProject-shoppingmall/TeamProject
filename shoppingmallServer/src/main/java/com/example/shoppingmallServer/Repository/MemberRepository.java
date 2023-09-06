@@ -15,8 +15,13 @@ import static com.example.shoppingmallServer.Entity.QMember.member;
 public class MemberRepository {
     private final EntityManager em;
 
-    public void regularJoin(Member member) {
-        em.persist(member);
+    public boolean regularJoin(Member member) {
+        try {
+            em.persist(member);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public Member findViewById(String userId) {

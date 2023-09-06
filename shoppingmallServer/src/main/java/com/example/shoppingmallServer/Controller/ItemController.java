@@ -1,17 +1,26 @@
 package com.example.shoppingmallServer.Controller;
 
+import com.example.shoppingmallServer.Dto.FileDto;
+import com.example.shoppingmallServer.Dto.ItemDto;
 import com.example.shoppingmallServer.Service.ItemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/item")
 public class ItemController {
     private final ItemService itemService;
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestPart FileDto fileDto ,@RequestPart("file") MultipartFile multipartFile) throws IOException {
+        return itemService.uploadImage(fileDto, multipartFile);
+    }
+
     @GetMapping("/best")
     public String bestItem() {
         return "home";

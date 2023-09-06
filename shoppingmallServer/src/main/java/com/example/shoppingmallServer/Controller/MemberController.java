@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,20 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 public class MemberController{
     private final MemberService memberService;
-
+    private final PasswordEncoder passwordEncoder;
     @PostMapping("/regularJoin")
     public ResponseEntity<String> regularJoin(@RequestBody MemberDto memberDto) {
         log.info("Controller regularPost");
+        memberDto.setMemberPw(passwordEncoder.encode(memberDto.getMemberPw()));
         Member member = Member.createMember(memberDto);
-
-        if (memberService.regularJoin(member)) {
-            return ResponseEntity.ok("회원가입이 성공적으로 완료되었습니다.");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("이미 존재하는 회원입니다.");
-        }
+        return memberService.regularJoin(member);
     }
-
     @PostMapping("/kakaoJoin")
     public String kakaoJoin() {
         return "home";
@@ -43,20 +38,14 @@ public class MemberController{
     }
 
     @PostMapping("/login")
-    public String login() {
-        return "True";
+    public ResponseEntity<String> login(@RequestParam("memberId") String memberId, @RequestParam("memberPw") String memberPw) {
+        log.info("controller login");
+        return memberService.login(memberId, memberPw);
     }
 
     @PutMapping("/modify")
-    public String memberModify(@RequestParam("userId") String userId, @RequestBody MemberDto memberDto) throws Exception {
-        Member searchMember = memberService.findViewById(userId);
-        log.info(searchMember.toString());
-        try {
-            searchMember.modifyMember(memberDto);
-            memberService.modify(searchMember);
-        } catch (Exception e) {
-            throw new Exception("수정 정보에 오류가 발생했습니다.");
-        }
-        return "success";
+    public ResponseEntity<String> memberModify(@RequestParam("userId") String userId, @RequestBody MemberDto memberDto) throws Exception {
+        log.info("controller modify");
+        return memberService.modify(userId, memberDto);
     }
 }
