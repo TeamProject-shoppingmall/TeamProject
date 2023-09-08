@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 public class Admin {
     @Id
     @GeneratedValue
-    @Column(name = "admin_key")
     private int adminKey;
     private String adminId;
     private String adminPw;

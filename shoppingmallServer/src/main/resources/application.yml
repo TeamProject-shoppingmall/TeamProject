@@ -10,6 +10,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    show-sql: true
   servlet:
     multipart:
       max-file-size: 10MB
@@ -17,6 +18,7 @@ spring:
 logging:
   level:
     org.hibernate.sql: debug
+    org.hibernate.orm.jdbc.bind: trace
 
 springdoc:
   swagger-ui:
