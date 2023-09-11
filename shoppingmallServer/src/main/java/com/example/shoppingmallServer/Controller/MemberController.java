@@ -19,13 +19,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 public class MemberController{
     private final MemberService memberService;
-    private final PasswordEncoder passwordEncoder;
     @PostMapping("/regularJoin")
     public ResponseEntity<String> regularJoin(@RequestBody MemberDto memberDto) {
         log.info("Controller regularPost");
-        memberDto.setMemberPw(passwordEncoder.encode(memberDto.getMemberPw()));
-        Member member = Member.createMember(memberDto);
-        return memberService.regularJoin(member);
+        return memberService.regularJoin(memberDto);
     }
     @PostMapping("/kakaoJoin")
     public String kakaoJoin() {
