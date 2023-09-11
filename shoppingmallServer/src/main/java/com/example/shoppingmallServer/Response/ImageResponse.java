@@ -1,6 +1,7 @@
 package com.example.shoppingmallServer.Response;
 
 import lombok.Data;
+import org.springframework.core.io.Resource;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,15 +11,28 @@ import java.io.InputStream;
 public class ImageResponse {
     private String imageName;
     private int imagePrice;
-    private String imagePath;
+    private byte[] image;
+    private String errorMessage;
 
-    public ImageResponse(String imageName, int imagePrice, String imagePath) throws FileNotFoundException {
+    public ImageResponse(String imageName, int imagePrice, byte[] image) throws FileNotFoundException {
         this.imageName = imageName;
         this.imagePrice = imagePrice;
-        this.imagePath = imagePath;
+        this.image = image;
+        this.errorMessage = null;
     }
 
-    public static ImageResponse findImageOne(String imageName, int imagePrice, String imagePath) throws FileNotFoundException {
-        return new ImageResponse(imageName,imagePrice,imagePath);
+    public ImageResponse(String errorMessage) {
+        this.imageName = null;
+        this.imagePrice = 0;
+        this.image = null;
+        this.errorMessage = errorMessage;
+    }
+
+    public static ImageResponse findImageOne(String imageName, int imagePrice, byte[] image) throws FileNotFoundException {
+        return new ImageResponse(imageName,imagePrice,image);
+    }
+
+    public static ImageResponse getErrorMessage(String errorMessage) {
+        return new ImageResponse(errorMessage);
     }
 }

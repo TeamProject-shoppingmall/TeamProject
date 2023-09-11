@@ -22,39 +22,13 @@ public class ItemController {
         return itemService.uploadImage(fileDto, multipartFile);
     }
 
-    @GetMapping("/load")
-    public ResponseEntity<List<ImageResponse>> loadImage(@RequestParam("category") String category) throws IOException {
+    @GetMapping("/findAllByCategory")
+    public ResponseEntity<List<ImageResponse>> findAllByCategory(@RequestParam("category") String category) throws IOException {
         return itemService.findAllByCategory(category);
     }
 
-    @GetMapping("/best")
-    public String bestItem() {
-        return "home";
-    }
-
-    @GetMapping("/top")
-
-    public String topItem() {
-        return "home";
-    }
-
-    @GetMapping("/shirt")
-    public String shirtItem() {
-        return "home";
-    }
-
-    @GetMapping("/bottom")
-    public String bottomItem() {
-        return "home";
-    }
-
-    @GetMapping("/acc")
-    public String accItem() {
-        return "home";
-    }
-
-    @PostMapping("/insert")
-    public String insertItem() {
-        return "home";
+    @GetMapping("/findByItemName")
+    public ResponseEntity<ImageResponse> findByItemName(@RequestParam("itemName") String name) {
+        return itemService.findByItemName(name);
     }
 }

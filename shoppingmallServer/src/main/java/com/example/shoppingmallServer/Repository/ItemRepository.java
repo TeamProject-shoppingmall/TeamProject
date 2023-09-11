@@ -29,4 +29,9 @@ public class ItemRepository {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         return queryFactory.selectFrom(item).where(item.categoryType.eq(CategoryEnum.valueOf(category))).fetch();
     }
+
+    public Item findByItemName(String name) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        return queryFactory.selectFrom(item).where(item.itemName.eq(name)).fetchOne();
+    }
 }
