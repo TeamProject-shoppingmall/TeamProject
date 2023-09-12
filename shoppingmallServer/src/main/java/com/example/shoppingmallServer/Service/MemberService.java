@@ -12,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -24,15 +22,15 @@ public class MemberService {
 //        String chkId = Optional.ofNullable(memberDto.getMemberId()).orElseThrow(EmptyValueExistException::new);
 //        String chkPw = Optional.ofNullable(memberDto.getMemberPw()).orElseThrow(EmptyValueExistException::new);
         if (StringUtils.isBlank(memberDto.getMemberId())) {
-            throw new EmptyValueExistException();
+            throw new EmptyValueException("아이디가 입력되지 않았습니다.");
         }
 
         if (StringUtils.isBlank(memberDto.getMemberPw())) {
-            throw new EmptyValueExistException();
+            throw new EmptyValueException("비밀번호가 입력되지 않았습니다.");
         }
 
         if (memberRepository.findViewById(memberDto.getMemberId()) != null) {
-            throw new DuplicateUserException();
+            throw new DuplicateUserException("중복된 아이디입니다.");
         }
 
         memberDto.setMemberPw(passwordEncoder.encode(memberDto.getMemberPw()));
@@ -42,16 +40,20 @@ public class MemberService {
             memberRepository.regularJoin(member);
             return new ResponseEntity<>("회원가입이 완료됐습니다", HttpStatus.OK);
         } catch (Exception e) {
-            throw new FailedJoinException();
+            throw new FailedJoinException("회원가입이 실패했습니다.");
         }
     }
 
     @Transactional
     public ResponseEntity<String> modify(String memberId, MemberDto memberDto) {
+        if (StringUtils.isBlank(memberDto.getMemberId())) {
+            throw new EmptyValueException("아이디가 입력되지 않았습니다.");
+        }
+
         Member searchMember = memberRepository.findViewById(memberId);
 
         if (searchMember == null) {
-            throw new NotFoundUserException();
+            throw new NotFoundUserException("아이디가 존재하지 않습니다.");
         }
 
         searchMember.modifyMember(memberDto);
@@ -60,17 +62,28 @@ public class MemberService {
             memberRepository.modifyMember(searchMember);
             return new ResponseEntity<>("회원가입이 완료됐습니다", HttpStatus.OK);
         } catch (Exception e) {
-            throw new FailedModifyException();
+            throw new FailedModifyException("회원수정에 실패했습니다.");
         }
     }
 
     public ResponseEntity<String> login(String memberId, String memberPw) {
+        if (StringUtils.isBlank(memberId)) {
+            throw new EmptyValueException("아이디가 입력되지 않았습니다.");
+        }
+
+        if (StringUtils.isBlank(memberPw)) {
+            throw new EmptyValueException("비밀번호가 입력되지 않았습니다.");
+        }
+
         Member viewById = memberRepository.findViewById(memberId);
+        if (viewById == null) {
+            throw new NotFoundUserException("아이디가 존재하지 않습니다.");
+        }
+
         if (passwordEncoder.matches(memberPw, viewById.getMemberPw())) {
-            return ResponseEntity.ok("로그인에 성공했습니다.");
+            return new ResponseEntity<>("로그인이 성공했습니다.", HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("아이디 또는 비밀번호가 일치하지 않습니다.");
+            throw new PwDoesNotMatch("비밀번호가 일치하지 않습니다.");
         }
     }
 }

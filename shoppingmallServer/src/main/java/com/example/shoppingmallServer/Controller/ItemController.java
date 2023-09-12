@@ -28,7 +28,7 @@ public class ItemController {
     }
 
     @GetMapping("/findByItemName")
-    public ResponseEntity<ImageResponse> findByItemName(@RequestParam("itemName") String name) {
+    public ResponseEntity<ImageResponse> findByItemName(@RequestParam("itemName") String name) throws IOException {
         return itemService.findByItemName(name);
     }
 }

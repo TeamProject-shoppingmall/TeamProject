@@ -11,45 +11,68 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value = {UserNotExistException.class})
-    public ResponseEntity<Object> handleUserNotExistException(UserNotExistException e) {
+    @ExceptionHandler(value = {EmptyValueException.class})
+    public ResponseEntity<Object> handleEmptyValueExistException(EmptyValueException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        ApiException apiException = new ApiException("ExceptionMessage.USER_NOT_EXIST_MESSAGE", httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
-        return new ResponseEntity<>(apiException, httpStatus);
-    }
-
-    @ExceptionHandler(value = {EmptyValueExistException.class})
-    public ResponseEntity<Object> handleEmptyValueExistException(EmptyValueExistException e) {
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        ApiException apiException = new ApiException("ExceptionMessage.EMPTY_VALUE_EXIST_MESSAGE", httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
     @ExceptionHandler(value = {DuplicateUserException.class})
     public ResponseEntity<Object> handleDuplicateUserException(DuplicateUserException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        ApiException apiException = new ApiException("ExceptionMessage.DUPLICATE_USER_EXIST_MESSAGE", httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
     @ExceptionHandler(value = {FailedJoinException.class})
     public ResponseEntity<Object> handleJoinFailException(FailedJoinException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        ApiException apiException = new ApiException("ExceptionMessage.FAILED_JOIN_MESSAGE", httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
     @ExceptionHandler(value = {NotFoundUserException.class})
-    public ResponseEntity<Object> handleJoinFailException(NotFoundUserException e) {
+    public ResponseEntity<Object> handleNotFoundUserException(NotFoundUserException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        ApiException apiException = new ApiException("ExceptionMessage.NOT_FOUND_USER_MESSAGE", httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
     @ExceptionHandler(value = {FailedModifyException.class})
-    public ResponseEntity<Object> handleJoinFailException(FailedModifyException e) {
+    public ResponseEntity<Object> handleFailedModifyException(FailedModifyException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        ApiException apiException = new ApiException("ExceptionMessage.FAILED_MODIFY_MESSAGE", httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, httpStatus);
     }
+
+    @ExceptionHandler(value = {FailedUploadItem.class})
+    public ResponseEntity<Object> handleFailedUploadItem(FailedUploadItem e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(value = {EmptyCategoryItem.class})
+    public ResponseEntity<Object> handleEmptyCategoryItem(EmptyCategoryItem e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(value = {DuplicateFileException.class})
+    public ResponseEntity<Object> handleDuplicateFileException(DuplicateFileException e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
 }
