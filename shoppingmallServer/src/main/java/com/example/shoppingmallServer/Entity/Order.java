@@ -25,7 +25,7 @@ public class Order {
 
     private OrderStatusEnum orderStatus;
 
-    private String orderReciever;
+    private String orderReceiver;
 
     private String orderPhone;
 

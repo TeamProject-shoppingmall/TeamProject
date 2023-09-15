@@ -11,7 +11,7 @@ import lombok.Getter;
 public class Member {
     @Id
     @GeneratedValue
-    @Column(name="member_Key")
+    @Column(name="member_key")
     private int memberKey;
 
     private MemberEnum regularMember;

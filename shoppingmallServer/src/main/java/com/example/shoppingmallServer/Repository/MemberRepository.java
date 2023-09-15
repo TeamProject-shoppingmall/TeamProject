@@ -24,7 +24,11 @@ public class MemberRepository {
         }
     }
 
-    public Member findViewById(String userId) {
+    public Member findOneById(int memberId) {
+        return em.find(Member.class, memberId);
+    }
+
+    public Member findOneByUserId(String userId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         return queryFactory.selectFrom(member)

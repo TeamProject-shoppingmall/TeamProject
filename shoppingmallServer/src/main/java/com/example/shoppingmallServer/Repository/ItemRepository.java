@@ -30,6 +30,10 @@ public class ItemRepository {
         return queryFactory.selectFrom(item).where(item.categoryType.eq(CategoryEnum.valueOf(category))).fetch();
     }
 
+    public Item findOneById(int itemId) {
+        return em.find(Item.class, itemId);
+    }
+
     public Item findByItemName(String name) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         return queryFactory.selectFrom(item).where(item.itemName.eq(name)).fetchOne();

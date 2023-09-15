@@ -35,8 +35,8 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
-    @ExceptionHandler(value = {NotFoundUserException.class})
-    public ResponseEntity<Object> handleNotFoundUserException(NotFoundUserException e) {
+    @ExceptionHandler(value = {NotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundUserException(NotFoundException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         String errorMessage = e.getMessage();
         ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
@@ -69,6 +69,13 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {DuplicateFileException.class})
     public ResponseEntity<Object> handleDuplicateFileException(DuplicateFileException e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+    @ExceptionHandler(value = {FailedInsertCart.class})
+    public ResponseEntity<Object> handleFailedInsertCart(FailedInsertCart e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         String errorMessage = e.getMessage();
         ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));

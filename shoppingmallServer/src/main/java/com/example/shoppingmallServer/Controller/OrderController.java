@@ -1,5 +1,7 @@
 package com.example.shoppingmallServer.Controller;
 
+import com.example.shoppingmallServer.Dto.CartDto;
+import com.example.shoppingmallServer.Service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class OrderController {
 
+    private final OrderService orderService;
+
     @PostMapping("/insert")
-    public String orderInsert() {
+    public String orderInsert(CartDto orderDto) {
         return "home";
     }
 

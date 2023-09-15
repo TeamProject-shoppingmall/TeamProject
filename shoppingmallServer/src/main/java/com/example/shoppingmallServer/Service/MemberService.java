@@ -29,7 +29,7 @@ public class MemberService {
             throw new EmptyValueException("비밀번호가 입력되지 않았습니다.");
         }
 
-        if (memberRepository.findViewById(memberDto.getMemberId()) != null) {
+        if (memberRepository.findOneByUserId(memberDto.getMemberId()) != null) {
             throw new DuplicateUserException("중복된 아이디입니다.");
         }
 
@@ -50,10 +50,10 @@ public class MemberService {
             throw new EmptyValueException("아이디가 입력되지 않았습니다.");
         }
 
-        Member searchMember = memberRepository.findViewById(memberId);
+        Member searchMember = memberRepository.findOneByUserId(memberId);
 
         if (searchMember == null) {
-            throw new NotFoundUserException("아이디가 존재하지 않습니다.");
+            throw new NotFoundException("아이디가 존재하지 않습니다.");
         }
 
         searchMember.modifyMember(memberDto);
@@ -75,9 +75,9 @@ public class MemberService {
             throw new EmptyValueException("비밀번호가 입력되지 않았습니다.");
         }
 
-        Member viewById = memberRepository.findViewById(memberId);
+        Member viewById = memberRepository.findOneByUserId(memberId);
         if (viewById == null) {
-            throw new NotFoundUserException("아이디가 존재하지 않습니다.");
+            throw new NotFoundException("아이디가 존재하지 않습니다.");
         }
 
         if (passwordEncoder.matches(memberPw, viewById.getMemberPw())) {
