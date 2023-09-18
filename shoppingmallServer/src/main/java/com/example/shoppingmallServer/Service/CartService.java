@@ -79,5 +79,14 @@ public class CartService {
             throw new FileNotFoundException("상품 이미지가 존재하지 않습니다.");
         }
     }
+
+    @Transactional
+    public ResponseEntity<String> remove(int cartKey, int memberKey) {
+        Cart cartById = cartRepository.findCartById(cartKey, memberKey);
+        if (cartById == null) {
+            throw new NotFoundException("장바구니 정보가 존재하지 않습니다.");
+        }
+        return cartRepository.remove(cartById);
+    }
 }
 

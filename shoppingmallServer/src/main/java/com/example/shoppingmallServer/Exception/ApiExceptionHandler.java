@@ -82,4 +82,11 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
+    @ExceptionHandler(value = {FailedRemoveException.class})
+    public ResponseEntity<Object> handleFailedRemoveException(FailedRemoveException e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
 }

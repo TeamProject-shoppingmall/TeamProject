@@ -3,6 +3,7 @@ package com.example.shoppingmallServer.Repository;
 import com.example.shoppingmallServer.Entity.Cart;
 import com.example.shoppingmallServer.Entity.QItem;
 import com.example.shoppingmallServer.Exception.FailedInsertCart;
+import com.example.shoppingmallServer.Exception.FailedRemoveException;
 import com.example.shoppingmallServer.Exception.NotFoundException;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static com.example.shoppingmallServer.Entity.QCart.cart;
 import static com.example.shoppingmallServer.Entity.QItem.item;
+import static com.example.shoppingmallServer.Entity.QMember.member;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,5 +41,19 @@ public class CartRepository {
                     cart.itemKey.itemPrice,
                     cart.itemKey.itemPath,
                     cart.cartCount.multiply(cart.itemKey.itemPrice)).from(cart).join(cart.itemKey, item).where(cart.memberKey.memberKey.eq(key)).fetch();
+    }
+
+    public Cart findCartById(int cartKey, int memberKey) {
+            JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+            return queryFactory.selectFrom(cart).where(cart.cartKey.eq(cartKey)).where(cart.memberKey.memberKey.eq(memberKey)).fetchOne();
+    }
+
+    public ResponseEntity<String> remove(Cart cart) {
+        try {
+            em.remove(cart);
+            return new ResponseEntity<>("장바구니를 삭제했습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            throw new FailedRemoveException("장바구니 삭제에 실패했습니다.");
+        }
     }
 }

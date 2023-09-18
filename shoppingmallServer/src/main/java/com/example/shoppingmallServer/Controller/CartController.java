@@ -30,4 +30,8 @@ public class CartController {
         return cartService.findOneById(key);
     }
 
+    @PostMapping("/remove")
+    public ResponseEntity<String> remove(@RequestParam("cartKey") int cartKey, @RequestParam("memberKey") int memberKey) {
+        return cartService.remove(cartKey, memberKey);
+    }
 }
