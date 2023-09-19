@@ -1,12 +1,10 @@
 package com.example.shoppingmallServer.Controller;
 
-import com.example.shoppingmallServer.Dto.CartDto;
+import com.example.shoppingmallServer.Dto.OrderDto;
 import com.example.shoppingmallServer.Service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,10 +14,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/insert")
-    public String orderInsert(CartDto orderDto) {
-        return "home";
+    public ResponseEntity<String> orderInsert(@RequestBody OrderDto orderDto) {
+        return orderService.orderInsert(orderDto);
     }
-
     @PostMapping("/cancel")
     public String orderCancel() {
         return "home";

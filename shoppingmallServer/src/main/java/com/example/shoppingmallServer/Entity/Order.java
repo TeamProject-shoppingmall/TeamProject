@@ -1,9 +1,8 @@
 package com.example.shoppingmallServer.Entity;
 
-import com.example.shoppingmallServer.Enum.OrderStatusEnum;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,12 +18,6 @@ public class Order {
     @JoinColumn(name = "member_key") // 이 부분을 수정해야 함
     private Member member;
 
-    private int totalPrice;
-
-    private Date orderDate;
-
-    private OrderStatusEnum orderStatus;
-
     private String orderReceiver;
 
     private String orderPhone;
@@ -33,9 +26,21 @@ public class Order {
 
     private String orderAddr;
 
-    private String orderDetailAddr;
+    private String orderAddrDetail;
 
-    private String orderRequest;
+    public Order(List<Object> order, Member member) {
+        this.member = member;
+        this.orderReceiver = (String) order.get(0);
+        this.orderPhone = (String) order.get(1);
+        this.orderZipcode = (String) order.get(2);
+        this.orderAddr = (String) order.get(3);
+        this.orderAddrDetail = (String) order.get(4);
+    }
+    public Order() {
 
-    private int orderCount;
+    }
+
+    public static Order createOrder(List<Object> order, Member member) {
+       return new Order(order, member);
+   }
 }

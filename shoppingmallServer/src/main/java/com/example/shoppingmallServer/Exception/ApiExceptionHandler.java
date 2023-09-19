@@ -74,8 +74,8 @@ public class ApiExceptionHandler {
         ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, httpStatus);
     }
-    @ExceptionHandler(value = {FailedInsertCart.class})
-    public ResponseEntity<Object> handleFailedInsertCart(FailedInsertCart e) {
+    @ExceptionHandler(value = {FailedInsertException.class})
+    public ResponseEntity<Object> handleFailedInsertCart(FailedInsertException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         String errorMessage = e.getMessage();
         ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
