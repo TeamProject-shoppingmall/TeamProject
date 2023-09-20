@@ -2,6 +2,7 @@ package com.example.shoppingmallServer.Entity;
 
 import com.example.shoppingmallServer.Enum.OrderStatusEnum;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "order_detail")
+@Getter
 public class OrderDetail {
     @Id
     @GeneratedValue

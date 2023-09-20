@@ -1,6 +1,7 @@
 package com.example.shoppingmallServer.Entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name="orders")
+@Getter
 public class Order {
     @Id
     @GeneratedValue

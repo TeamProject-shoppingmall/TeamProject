@@ -36,7 +36,7 @@ public class CartService {
     @Transactional
     public ResponseEntity<String> cartInsert(CartDto cartDto) {
         Member findMember = memberRepository.findOneById(cartDto.getMemberKey());
-        System.out.println(findMember);
+
         if (findMember == null) {
             throw new NotFoundException("회원을 찾을 수 없습니다.");
         }

@@ -1,10 +1,13 @@
 package com.example.shoppingmallServer.Controller;
 
 import com.example.shoppingmallServer.Dto.OrderDto;
+import com.example.shoppingmallServer.Response.OrderResponse;
 import com.example.shoppingmallServer.Service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +20,8 @@ public class OrderController {
     public ResponseEntity<String> orderInsert(@RequestBody OrderDto orderDto) {
         return orderService.orderInsert(orderDto);
     }
-    @PostMapping("/cancel")
-    public String orderCancel() {
+    @PostMapping("/remove")
+    public String orderRemove() {
         return "home";
     }
 
@@ -27,8 +30,8 @@ public class OrderController {
         return "home";
     }
 
-    @GetMapping("/find")
-    public String findOrder() {
-        return "home";
+    @GetMapping("/findAllById")
+    public ResponseEntity<List<OrderResponse>> findOrder(@RequestParam("key") int memberKey) {
+        return orderService.findAllById(memberKey);
     }
 }
