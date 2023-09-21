@@ -1,15 +1,15 @@
 package com.example.shoppingmallServer.Service;
 
 import com.example.shoppingmallServer.Dto.FileDto;
+import com.example.shoppingmallServer.Dto.ItemDto;
+import com.example.shoppingmallServer.Entity.Cart;
 import com.example.shoppingmallServer.Entity.Item;
-import com.example.shoppingmallServer.Exception.DuplicateFileException;
-import com.example.shoppingmallServer.Exception.EmptyCategoryItem;
-import com.example.shoppingmallServer.Exception.EmptyValueException;
-import com.example.shoppingmallServer.Exception.FailedUploadItem;
+import com.example.shoppingmallServer.Exception.*;
 import com.example.shoppingmallServer.Repository.ItemRepository;
 import com.example.shoppingmallServer.Response.ImageResponse;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemService {
@@ -102,13 +103,26 @@ public class ItemService {
         }
     }
 
-    public ResponseEntity<ImageResponse> findByItemName(String name) throws IOException {
-        Item item = itemRepository.findByItemName(name);
+    public ResponseEntity<ImageResponse> findOneById(int itemKey) throws IOException {
+        Item item = itemRepository.findOneById(itemKey);
         if (item == null) {
             throw new EmptyCategoryItem("등록된 상품이 없습니다.");
         }
         byte[] imageDataFromPath = getImageDataFromPath(item.getItemPath());
 
         return new ResponseEntity<>(ImageResponse.findImageOne(item.getItemName(), item.getItemPrice(), imageDataFromPath), HttpStatus.OK);
+    }
+
+
+    @Transactional
+    public ResponseEntity<String> removeImage(int itemKey) throws FileNotFoundException {
+        log.info("itemService");
+        Item oneById = itemRepository.findOneById(itemKey);
+        if (oneById == null) {
+            throw new NotFoundException("장바구니 정보가 존재하지 않습니다.");
+        }
+        File file = new File(oneById.getItemPath());
+        file.delete();
+        return itemRepository.removeImage(oneById);
     }
 }

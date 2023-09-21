@@ -47,7 +47,7 @@ public class Member {
         this.memberName = memberDto.getMemberName();
         this.memberEmail = memberDto.getMemberEmail();
         this.memberPhone = memberDto.getMemberPhone();
-//        this.memberGender = memberDto.getMemberGender();
+        this.memberGender = memberDto.getMemberGender();
         this.zipcode = memberDto.getZipcode();
         this.addr = memberDto.getAddr();
         this.addrDetail = memberDto.getAddrDetail();
@@ -61,7 +61,18 @@ public class Member {
         return new Member(memberDto);
     }
 
-    public static Member modifyMember(MemberDto memberDto) {
-        return new Member(memberDto);
+    public void modifyMember(MemberDto memberDto) {
+        this.regularMember = memberDto.getRegularMember();
+        this.kakaoMember = memberDto.getKakaoMember();
+        this.googleMember = memberDto.getGoogleMember();
+        this.memberId = memberDto.getMemberId();
+        this.memberPw = memberDto.getMemberPw();
+        this.memberName = memberDto.getMemberName();
+        this.memberEmail = memberDto.getMemberEmail();
+        this.memberPhone = memberDto.getMemberPhone();
+        this.memberGender = memberDto.getMemberGender();
+        this.zipcode = memberDto.getZipcode();
+        this.addr = memberDto.getAddr();
+        this.addrDetail = memberDto.getAddrDetail();
     }
 }

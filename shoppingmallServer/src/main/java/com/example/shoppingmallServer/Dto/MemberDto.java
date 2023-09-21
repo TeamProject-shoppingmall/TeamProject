@@ -26,7 +26,7 @@ public class MemberDto {
 
     private String memberPhone;
 
-//    private GenderEnum memberGender;
+    private GenderEnum memberGender;
 
     private String zipcode;
 

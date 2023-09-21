@@ -58,12 +58,7 @@ public class MemberService {
 
         searchMember.modifyMember(memberDto);
 
-        try {
-            memberRepository.modifyMember(searchMember);
-            return new ResponseEntity<>("회원가입이 완료됐습니다", HttpStatus.OK);
-        } catch (Exception e) {
-            throw new FailedModifyException("회원수정에 실패했습니다.");
-        }
+        return memberRepository.modifyMember(searchMember);
     }
 
     public ResponseEntity<String> login(String memberId, String memberPw) {
@@ -85,5 +80,14 @@ public class MemberService {
         } else {
             throw new PwDoesNotMatch("비밀번호가 일치하지 않습니다.");
         }
+    }
+
+    @Transactional
+    public ResponseEntity<String> remove(int memberKey) {
+        Member oneById = memberRepository.findOneById(memberKey);
+        if (oneById == null) {
+            throw new NotFoundException("회원 정보가 없습니다.");
+        }
+        return memberRepository.remove(oneById);
     }
 }

@@ -2,10 +2,13 @@ package com.example.shoppingmallServer.Repository;
 
 import com.example.shoppingmallServer.Entity.Item;
 import com.example.shoppingmallServer.Enum.CategoryEnum;
+import com.example.shoppingmallServer.Exception.FailedRemoveException;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,8 +37,21 @@ public class ItemRepository {
         return em.find(Item.class, itemId);
     }
 
-    public Item findByItemName(String name) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-        return queryFactory.selectFrom(item).where(item.itemName.eq(name)).fetchOne();
+    public ResponseEntity<String> removeImage(Item item) {
+        try {
+            em.remove(item);
+            return new ResponseEntity<>("상품 삭제를 성공했습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            throw new FailedRemoveException("상품 삭제에 실패했습니다");
+        }
+    }
+
+    public ResponseEntity<String> modifyImage (Item item) {
+        try {
+            em.merge(item);
+            return new ResponseEntity<>("상품 수정을 성공했습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            throw new FailedRemoveException("상품 수정에 실패했습니다.");
+        }
     }
 }

@@ -41,8 +41,13 @@ public class MemberController{
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<String> memberModify(@RequestParam("userId") String userId, @RequestBody MemberDto memberDto) throws Exception {
+    public ResponseEntity<String> memberModify(@RequestParam("memberId") String memberId, @RequestBody MemberDto memberDto) throws Exception {
         log.info("controller modify");
-        return memberService.modify(userId, memberDto);
+        return memberService.modify(memberId, memberDto);
+    }
+
+    @PostMapping("/remove")
+    public ResponseEntity<String> remove(@RequestParam("memberKey") int userKey) {
+        return memberService.remove(userKey);
     }
 }
