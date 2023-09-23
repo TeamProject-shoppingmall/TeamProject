@@ -38,5 +38,19 @@ public class Item {
     public static Item createItem(FileDto fileDto, String filePath, String category) {
         return new Item(fileDto, filePath, category);
     }
+
+    public void modifyItem(FileDto fileDto, String filePath) {
+        this.itemName = fileDto.getItemName();
+        this.itemCount = fileDto.getItemCount();
+        this.itemPrice = fileDto.getItemPrice();
+        this.itemPath = filePath;
+        this.categoryType = CategoryEnum.valueOf(fileDto.getCategory());
+    }
+    public void modifyItem(FileDto fileDto) {
+        this.itemName = fileDto.getItemName();
+        this.itemCount = fileDto.getItemCount();
+        this.itemPrice = fileDto.getItemPrice();
+        this.categoryType = CategoryEnum.valueOf(fileDto.getCategory());
+    }
 }
 

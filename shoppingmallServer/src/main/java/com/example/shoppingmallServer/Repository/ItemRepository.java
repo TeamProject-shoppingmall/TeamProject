@@ -19,7 +19,7 @@ import static com.example.shoppingmallServer.Entity.QItem.item;
 @RequiredArgsConstructor
 public class ItemRepository {
     private final EntityManager em;
-    public boolean uploadImage(Item item) {
+    public boolean uploadItem(Item item) {
         try {
             em.persist(item);
             return true;
@@ -37,7 +37,7 @@ public class ItemRepository {
         return em.find(Item.class, itemId);
     }
 
-    public ResponseEntity<String> removeImage(Item item) {
+    public ResponseEntity<String> removeItem(Item item) {
         try {
             em.remove(item);
             return new ResponseEntity<>("상품 삭제를 성공했습니다.", HttpStatus.OK);
@@ -46,7 +46,7 @@ public class ItemRepository {
         }
     }
 
-    public ResponseEntity<String> modifyImage (Item item) {
+    public ResponseEntity<String> modifyItem (Item item) {
         try {
             em.merge(item);
             return new ResponseEntity<>("상품 수정을 성공했습니다.", HttpStatus.OK);

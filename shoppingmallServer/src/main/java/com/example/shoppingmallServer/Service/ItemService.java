@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -38,27 +40,7 @@ public class ItemService {
     private String itemName;
     private String category;
     @Transactional
-    public ResponseEntity<String> uploadImage(FileDto fileDto, MultipartFile multipartFile) throws IOException {
-        if (fileDto.getItemCount() == 0) {
-            throw new EmptyValueException("상품 수량이 입력되지 않았습니다.");
-        }
-
-        if (fileDto.getItemPrice() == 0) {
-            throw new EmptyValueException("상품 가격이 입력되지 않았습니다.");
-        }
-
-        if (StringUtils.isBlank(fileDto.getItemName())) {
-            throw new EmptyValueException("파일이 전송되지 않았습니다.");
-        }
-
-        if (StringUtils.isBlank(fileDto.getCategory())) {
-            throw new EmptyValueException("카테고리가 입력되지 않았습니다.");
-        }
-
-        if (multipartFile.isEmpty()) {
-            throw new EmptyValueException("파일이 전송되지 않았습니다.");
-        }
-
+    public ResponseEntity<String> uploadItem(FileDto fileDto, MultipartFile multipartFile) throws IOException {
         String filePath = Paths.get(itemPath, multipartFile.getOriginalFilename()).toString();
         File file = new File(filePath);
 
@@ -71,7 +53,7 @@ public class ItemService {
         Item item = Item.createItem(fileDto, filePath, fileDto.getCategory());
 
         try{
-            itemRepository.uploadImage(item);
+            itemRepository.uploadItem(item);
             return new ResponseEntity<>("상품이 등록되었습니다.", HttpStatus.OK);
         } catch (Exception e){
             throw new FailedUploadItem("상품 등록에 실패했습니다.");
@@ -115,7 +97,7 @@ public class ItemService {
 
 
     @Transactional
-    public ResponseEntity<String> removeImage(int itemKey) throws FileNotFoundException {
+    public ResponseEntity<String> removeItem(int itemKey) throws FileNotFoundException {
         log.info("itemService");
         Item oneById = itemRepository.findOneById(itemKey);
         if (oneById == null) {
@@ -123,6 +105,26 @@ public class ItemService {
         }
         File file = new File(oneById.getItemPath());
         file.delete();
-        return itemRepository.removeImage(oneById);
+        return itemRepository.removeItem(oneById);
+    }
+
+    @Transactional
+    public ResponseEntity<String> modifyItem(FileDto fileDto, MultipartFile multipartFile, int itemKey) throws IOException {
+        Item oneById = itemRepository.findOneById(itemKey);
+        if (oneById == null) {
+            throw new NotFoundException("상품을 찾을 수 없습니다.");
+        }
+        String filePath = Paths.get(itemPath, multipartFile.getOriginalFilename()).toString();
+
+        if (oneById.getItemPath() != filePath) {
+            File removeFile = new File(oneById.getItemPath());
+            removeFile.delete();
+            File insertFile = new File(filePath);
+            multipartFile.transferTo(insertFile);
+            oneById.modifyItem(fileDto, filePath);
+        } else {
+            oneById.modifyItem(fileDto);
+        }
+        return itemRepository.modifyItem(oneById);
     }
 }

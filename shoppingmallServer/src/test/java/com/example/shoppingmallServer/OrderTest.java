@@ -1,26 +1,18 @@
 package com.example.shoppingmallServer;
 
 import com.example.shoppingmallServer.Dto.OrderDto;
-import com.example.shoppingmallServer.Entity.Order;
-import com.example.shoppingmallServer.Entity.OrderDetail;
 import com.example.shoppingmallServer.Repository.ItemRepository;
 import com.example.shoppingmallServer.Repository.MemberRepository;
 import com.example.shoppingmallServer.Repository.OrderRepository;
 import com.example.shoppingmallServer.Service.OrderService;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
 
 @SpringBootTest
 public class OrderTest {
@@ -55,13 +47,16 @@ public class OrderTest {
         orderService.orderInsert(orderDto);
     }
 
-//    @Test
-//    @Transactional
-//    public void 주문조회테스트() {
-//        List<OrderDetail> allById = orderService.findAllById(1);
-//        for (OrderDetail or: allById) {
-//            System.out.println(or.getOrder().getOrderPhone());
-//            System.out.println(or.getTotalPrice());
-//        }
-//    }
+    @Test
+    @Transactional
+    public void 주문조회테스트() {
+        orderService.findAllById(1);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void 주문삭제테스트() {
+        orderService.remove(1);
+    }
 }

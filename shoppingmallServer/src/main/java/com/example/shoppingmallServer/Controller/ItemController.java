@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestPart FileDto fileDto, @RequestPart("file") MultipartFile multipartFile) throws IOException {
-        return itemService.uploadImage(fileDto, multipartFile);
+    public ResponseEntity<String> uploadItem(@RequestPart FileDto fileDto, @RequestPart("file") MultipartFile multipartFile) throws IOException {
+        return itemService.uploadItem(fileDto, multipartFile);
     }
 
     @GetMapping("/findAllByCategory")
@@ -35,9 +36,14 @@ public class ItemController {
         return itemService.findOneById(itemKey);
     }
 
+    @PutMapping("modify")
+    public ResponseEntity<String> modify(@RequestPart FileDto fileDto, @RequestPart("file") MultipartFile multipartFile, @RequestParam("itemKey") int itemKey) throws IOException {
+        return itemService.modifyItem(fileDto, multipartFile, itemKey);
+    }
+
     @PostMapping("/remove")
     public ResponseEntity<String> removeImage(@RequestParam("itemKey") int itemKey) throws FileNotFoundException {
         log.info("remove Controller");
-        return itemService.removeImage(itemKey);
+        return itemService.removeItem(itemKey);
     }
 }

@@ -20,16 +20,11 @@ public class OrderController {
     public ResponseEntity<String> orderInsert(@RequestBody OrderDto orderDto) {
         return orderService.orderInsert(orderDto);
     }
+
     @PostMapping("/remove")
-    public String orderRemove() {
-        return "home";
+    public ResponseEntity<String> orderRemove(@RequestParam("orderDetailKey") int key) {
+        return orderService.remove(key);
     }
-
-    @PostMapping("/modify")
-    public String orderModify() {
-        return "home";
-    }
-
     @GetMapping("/findAllById")
     public ResponseEntity<List<OrderResponse>> findOrder(@RequestParam("key") int memberKey) {
         return orderService.findAllById(memberKey);

@@ -4,6 +4,7 @@ import com.example.shoppingmallServer.Entity.Member;
 import com.example.shoppingmallServer.Entity.Order;
 import com.example.shoppingmallServer.Entity.OrderDetail;
 import com.example.shoppingmallServer.Exception.FailedInsertException;
+import com.example.shoppingmallServer.Exception.FailedRemoveException;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -45,5 +46,25 @@ public class OrderRepository {
                 .where(orderDetail.order.member.memberKey.eq(memberKey))
                 .fetchJoin()
                 .fetch();
+    }
+    public OrderDetail findOneById(int orderDetailKey) {
+        return em.find(OrderDetail.class, orderDetailKey);
+    }
+
+    public void removeOrder(Order order) {
+        try {
+            em.remove(order);
+        } catch (Exception e) {
+            throw new FailedRemoveException("주문 삭제에 실패했습니다.");
+        }
+    }
+
+    public ResponseEntity<String> removeOrderDetail(OrderDetail orderDetail) {
+        try {
+            em.remove(orderDetail);
+            return new ResponseEntity<>("주문 삭제를 성공했습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            throw new FailedRemoveException("주문 삭제에 실패했습니다.");
+        }
     }
 }

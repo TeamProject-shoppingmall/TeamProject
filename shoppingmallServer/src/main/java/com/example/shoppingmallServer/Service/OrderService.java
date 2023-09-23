@@ -64,4 +64,13 @@ public class OrderService {
         }
         return new ResponseEntity<>(orderResponses, HttpStatus.OK);
     }
+    public ResponseEntity<String> remove(int orderDetailKey) {
+        OrderDetail oneById = orderRepository.findOneById(orderDetailKey);
+        if (oneById == null) {
+            throw new NotFoundException("주문을 찾을 수 없습니다.");
+        }
+        orderRepository.removeOrder(oneById.getOrder());
+        return orderRepository.removeOrderDetail(oneById);
+    }
+
 }
