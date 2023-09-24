@@ -12,6 +12,7 @@ import com.example.shoppingmallServer.Repository.MemberRepository;
 import com.example.shoppingmallServer.Repository.OrderRepository;
 import com.example.shoppingmallServer.Response.OrderResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -35,14 +36,15 @@ public class OrderService {
             throw new NotFoundException("회원을 찾을 수 없습니다.");
         }
 
-        Order order = Order.createOrder(orderDto.getOrder(), findMember);
 
         Item findItem = itemRepository.findOneById(orderDto.getItemKey());
         if (findItem == null) {
             throw new NotFoundException("상품을 찾을 수 없습니다.");
         }
 
+        Order order = Order.createOrder(orderDto.getOrder(), findMember);
         Order findOrder = orderRepository.insertOrder(order);
+
         if (findOrder == null) {
             throw new NotFoundException("주문 정보가 없습니다..");
         }

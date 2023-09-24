@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +31,14 @@ public class OrderDetail {
 
     private int totalPrice;
 
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 
     private OrderStatusEnum orderStatus;
 
     public OrderDetail(List<Object> orderDetail, Order order, Item item) {
         this.item = item;
         this.order = order;
-        this.orderDate = (LocalDate)orderDetail.get(3);
+        this.orderDate = (LocalDateTime) orderDetail.get(3);
         this.orderCount = (int)orderDetail.get(0);
         this.orderPrice = (int)orderDetail.get(1);
         this.totalPrice = (int)orderDetail.get(2);

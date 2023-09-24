@@ -3,6 +3,8 @@ package com.example.shoppingmallServer.Entity;
 import com.example.shoppingmallServer.Dto.CartDto;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -22,7 +24,7 @@ public class Cart {
 
     private int cartCount;
 
-    private ZonedDateTime cartDate;
+    private LocalDateTime cartDate;
 
     public Cart(Member member, Item item, CartDto cartDto) {
         this.memberKey = member;

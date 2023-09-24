@@ -24,8 +24,12 @@ public class OrderRepository {
     private final EntityManager em;
 
     public Order insertOrder(Order order) {
-        em.persist(order);
-        return order;
+        try {
+            em.persist(order);
+            return order;
+        } catch (Exception e) {
+            throw new FailedInsertException("주문 추가에 실패했습니다.");
+        }
     }
 
     public ResponseEntity<String> insertOrderDetail(OrderDetail orderDetail) {

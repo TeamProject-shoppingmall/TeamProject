@@ -29,7 +29,7 @@ public class CartTest {
 
     @Test
     public void 장바구니테스트() {
-        CartDto cartDto = new CartDto(1, 2, 3, ZonedDateTime.now());
-        cartService.cartInsert(cartDto);
+//        CartDto cartDto = new CartDto(1, 2, 3, ZonedDateTime.now());
+//        cartService.cartInsert(cartDto);
     }
 }

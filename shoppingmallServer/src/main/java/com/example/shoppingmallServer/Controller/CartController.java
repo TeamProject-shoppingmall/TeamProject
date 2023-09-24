@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@ResponseBody
 @RequiredArgsConstructor
 @RequestMapping("/cart")
 public class CartController {

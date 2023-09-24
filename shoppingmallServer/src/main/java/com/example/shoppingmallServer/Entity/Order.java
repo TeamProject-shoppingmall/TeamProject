@@ -2,6 +2,7 @@ package com.example.shoppingmallServer.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.Date;

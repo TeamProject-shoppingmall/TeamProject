@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class OrderResponse {
@@ -18,7 +19,7 @@ public class OrderResponse {
     private String orderZipcode;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 //    private int itemKey;
     private int orderCount;
     private int orderPrice;

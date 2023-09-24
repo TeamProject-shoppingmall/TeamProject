@@ -12,6 +12,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @SpringBootTest
@@ -35,13 +36,13 @@ public class OrderTest {
         orderDto.setOrderAddr("부천");
         orderDto.setOrderCount(3);
         orderDto.setOrderReceiver("이주훈");
-        orderDto.setOrderDate(LocalDate.parse("2023-09-19 18:03:32", formatter));
+        orderDto.setOrderDate(LocalDateTime.parse("2023-01-18T11:22:33"));
         orderDto.setOrderPhone("010-1111-1111");
         orderDto.setOrderPrice(15000);
         orderDto.setTotalPrice(orderDto.getOrderPrice() * orderDto.getOrderCount());
         orderDto.setOrderZipcode("11111");
         orderDto.setMemberKey(1);
-        orderDto.setItemKey(2);
+        orderDto.setItemKey(1);
         orderDto.setOrderAddrDetail("우리집");
 
         orderService.orderInsert(orderDto);

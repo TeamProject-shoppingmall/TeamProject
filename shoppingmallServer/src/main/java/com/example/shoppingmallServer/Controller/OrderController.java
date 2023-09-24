@@ -20,7 +20,6 @@ public class OrderController {
     public ResponseEntity<String> orderInsert(@RequestBody OrderDto orderDto) {
         return orderService.orderInsert(orderDto);
     }
-
     @PostMapping("/remove")
     public ResponseEntity<String> orderRemove(@RequestParam("orderDetailKey") int key) {
         return orderService.remove(key);

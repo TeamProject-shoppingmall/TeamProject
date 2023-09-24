@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +30,8 @@ public class OrderDto {
     private String orderAddr;
     private String orderAddrDetail;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDate orderDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime orderDate;
     private int itemKey;
     private int orderCount;
     private int orderPrice;
