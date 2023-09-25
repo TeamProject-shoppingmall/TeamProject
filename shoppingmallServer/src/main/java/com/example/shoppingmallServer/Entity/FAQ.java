@@ -1,6 +1,7 @@
 package com.example.shoppingmallServer.Entity;
 
 import com.example.shoppingmallServer.Dto.FAQDto;
+import com.example.shoppingmallServer.Dto.FAQModifyDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,5 +38,11 @@ public class FAQ {
 
     public static FAQ Create(FAQDto faqDto, Member member) {
         return new FAQ(faqDto, member);
+    }
+
+    public void Modify(FAQModifyDto faqModifyDto) {
+        this.faqTitle = faqModifyDto.getFaqTitle();
+        this.faqContent = faqModifyDto.getFaqContent();
+        this.faqDate = faqModifyDto.getFaqDate();
     }
 }

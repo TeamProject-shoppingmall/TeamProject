@@ -1,6 +1,7 @@
 package com.example.shoppingmallServer.Controller;
 
 import com.example.shoppingmallServer.Dto.FAQDto;
+import com.example.shoppingmallServer.Dto.FAQModifyDto;
 import com.example.shoppingmallServer.Response.FAQAllResponse;
 import com.example.shoppingmallServer.Response.FAQResponse;
 import com.example.shoppingmallServer.Service.FAQService;
@@ -30,9 +31,13 @@ public class FAQController {
     public ResponseEntity<FAQResponse> findOneById(@RequestParam("faqKey") int key) {
         return faqService.findOneById(key);
     }
+    @PostMapping("/remove")
+    public ResponseEntity<String> remove(@RequestParam("faqKey") int faqKey, @RequestParam("memberKey") int memberKey) {
+        return faqService.remove(faqKey, memberKey);
+    }
 
-//    @PostMapping("/remove")
-//    public ResponseEntity<String> remove(@RequestParam("faqKey") int key) {
-//
-//    }
+    @PutMapping("/modify")
+    public ResponseEntity<String> modify(@RequestParam("faqKey") int faqKey, @RequestParam("memberKey") int memberKey, @RequestBody FAQModifyDto faqModifyDto) {
+        return faqService.modify(faqKey, memberKey, faqModifyDto);
+    }
 }

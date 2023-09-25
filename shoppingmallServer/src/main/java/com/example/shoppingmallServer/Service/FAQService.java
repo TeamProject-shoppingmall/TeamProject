@@ -1,8 +1,10 @@
 package com.example.shoppingmallServer.Service;
 
 import com.example.shoppingmallServer.Dto.FAQDto;
+import com.example.shoppingmallServer.Dto.FAQModifyDto;
 import com.example.shoppingmallServer.Entity.FAQ;
 import com.example.shoppingmallServer.Entity.Member;
+import com.example.shoppingmallServer.Exception.FailedRemoveException;
 import com.example.shoppingmallServer.Exception.NotFoundException;
 import com.example.shoppingmallServer.Repository.FAQRepository;
 import com.example.shoppingmallServer.Repository.MemberRepository;
@@ -27,7 +29,7 @@ public class FAQService {
 
     @Transactional
     public ResponseEntity<String> insert(FAQDto faqDto) {
-        Member oneById = memberRepository.findOneById(faqDto.getMemberId());
+        Member oneById = memberRepository.findOneById(faqDto.getMemberKey());
         if (oneById == null) {
             throw new NotFoundException("회원을 찾을 수 없습니다.");
         }
@@ -53,5 +55,30 @@ public class FAQService {
         FAQ oneById = faqRepository.findOneById(faqKey);
         FAQResponse faqDto = new FAQResponse(oneById.getFaqKey(), oneById.getMemberKey().getMemberId(), oneById.getFaqTitle(),oneById.getFaqContent(), oneById.getFaqDate());
         return new ResponseEntity<>(faqDto, HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<String> remove(int faqKey, int memberKey) {
+        FAQ oneById = faqRepository.findOneById(faqKey);
+        if (oneById == null) {
+            throw new NotFoundException("등록된 문의가 없습니다.");
+        }
+        if (oneById.getMemberKey().getMemberKey() != memberKey) {
+            throw new FailedRemoveException("작성자 외에는 삭제를 할 수 없습니다.");
+        }
+        return faqRepository.remove(oneById);
+    }
+
+    @Transactional
+    public ResponseEntity<String> modify(int faqKey, int memberKey, FAQModifyDto faqModifyDto) {
+        FAQ oneById = faqRepository.findOneById(faqKey);
+        if (oneById == null) {
+            throw new NotFoundException("등록된 문의가 없습니다.");
+        }
+        if (oneById.getMemberKey().getMemberKey() != memberKey) {
+            throw new FailedRemoveException("작성자 외에는 삭제를 할 수 없습니다.");
+        }
+        oneById.Modify(faqModifyDto);
+        return faqRepository.modify(oneById);
     }
 }
