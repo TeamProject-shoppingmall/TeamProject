@@ -2,6 +2,7 @@ package com.example.shoppingmallServer.Entity;
 
 import com.example.shoppingmallServer.Dto.FAQDto;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class FAQ {
     @Id
     @GeneratedValue
