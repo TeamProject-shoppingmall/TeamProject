@@ -1,8 +1,12 @@
 package com.example.shoppingmallServer.Controller;
 
 import com.example.shoppingmallServer.Dto.MemberDto;
+import com.example.shoppingmallServer.Dto.MemberLoginDto;
+import com.example.shoppingmallServer.Dto.TokenDto;
 import com.example.shoppingmallServer.Entity.Member;
 import com.example.shoppingmallServer.Service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +39,10 @@ public class MemberController{
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("memberId") String memberId, @RequestParam("memberPw") String memberPw) {
+    public ResponseEntity<TokenDto> login(@RequestBody MemberLoginDto memberLoginDto, HttpServletResponse response) {
         log.info("controller login");
-        return memberService.login(memberId, memberPw);
+        ResponseEntity<TokenDto> login = memberService.login(memberLoginDto, response);
+        return login;
     }
 
     @PutMapping("/modify")

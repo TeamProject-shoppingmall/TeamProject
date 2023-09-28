@@ -35,6 +35,14 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
+    @ExceptionHandler(value = {PwDoesNotMatched.class})
+    public ResponseEntity<Object> handlePwDoesNotMatched(PwDoesNotMatched e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = e.getMessage();
+        ApiException apiException = new ApiException(errorMessage, httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
     @ExceptionHandler(value = {NotFoundException.class})
     public ResponseEntity<Object> handleNotFoundUserException(NotFoundException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
