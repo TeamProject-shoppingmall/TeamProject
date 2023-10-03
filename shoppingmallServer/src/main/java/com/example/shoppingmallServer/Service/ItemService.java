@@ -1,5 +1,8 @@
 package com.example.shoppingmallServer.Service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.shoppingmallServer.Dto.FileDto;
 import com.example.shoppingmallServer.Dto.ItemDto;
 import com.example.shoppingmallServer.Entity.Cart;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -31,26 +35,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
+    private final AmazonS3Client amazonS3Client;
 
-    @Value("${file.path}")
-    private String itemPath;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
-    private int itemCount;
-    private int itemPrice;
-    private String itemName;
-    private String category;
     @Transactional
     public ResponseEntity<String> uploadItem(FileDto fileDto, MultipartFile multipartFile) throws IOException {
-        String filePath = Paths.get(itemPath, multipartFile.getOriginalFilename()).toString();
-        File file = new File(filePath);
+        File file = new File(multipartFile.getOriginalFilename());
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(multipartFile.getBytes());
 
-        try {
-            multipartFile.transferTo(file);
-        } catch (Exception e) {
-            throw new DuplicateFileException("이미 존재하는 파일입니다.");
+        String fileName = fileDto.getCategory() + "/" + file.getName();
+
+        // S3로 이미지 업로드 putObjectRequest 파일 인스턴스를 생성해 업로드 진행 (withCannedAcl은 접근 권한 설정)
+        log.info("upload S3");
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
+
+        if (file.delete()) {
+            log.info("파일이 삭제되었습니다.");
+        } else {
+            log.info("파일이 삭제되지 못했습니다.");
         }
 
-        Item item = Item.createItem(fileDto, filePath, fileDto.getCategory());
+        String url = amazonS3Client.getUrl(bucket, fileName).toString();
+
+        Item item = Item.createItem(fileDto, url, fileDto.getCategory());
 
         try{
             itemRepository.uploadItem(item);
@@ -68,8 +78,7 @@ public class ItemService {
         List<ImageResponse> imageAll = new ArrayList<>();
 
         for (Item item1: item) {
-            byte[] image = getImageDataFromPath(item1.getItemPath());
-            imageAll.add(ImageResponse.findImageOne(item1.getItemName(), item1.getItemPrice(), image));
+            imageAll.add(ImageResponse.findImageOne(item1.getItemName(), item1.getItemPrice(), item1.getItemPath()));
         }
         return new ResponseEntity<>(imageAll, HttpStatus.OK);
     }
@@ -90,9 +99,8 @@ public class ItemService {
         if (item == null) {
             throw new EmptyCategoryItem("등록된 상품이 없습니다.");
         }
-        byte[] imageDataFromPath = getImageDataFromPath(item.getItemPath());
 
-        return new ResponseEntity<>(ImageResponse.findImageOne(item.getItemName(), item.getItemPrice(), imageDataFromPath), HttpStatus.OK);
+        return new ResponseEntity<>(ImageResponse.findImageOne(item.getItemName(), item.getItemPrice(), item.getItemPath()), HttpStatus.OK);
     }
 
 
@@ -114,7 +122,7 @@ public class ItemService {
         if (oneById == null) {
             throw new NotFoundException("상품을 찾을 수 없습니다.");
         }
-        String filePath = Paths.get(itemPath, multipartFile.getOriginalFilename()).toString();
+        String filePath = Paths.get(multipartFile.getOriginalFilename()).toString();
 
         if (oneById.getItemPath() != filePath) {
             File removeFile = new File(oneById.getItemPath());

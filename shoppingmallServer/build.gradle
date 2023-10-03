@@ -39,6 +39,13 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	dependencies {
+		implementation group: 'commons-io', name: 'commons-io', version: '2.11.0' // 버전은 최신 버전으로 변경 가능
+	}
+	dependencies {
+		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	}
+
 }
 
 tasks.named('test') {

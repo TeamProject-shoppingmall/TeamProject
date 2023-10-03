@@ -23,10 +23,10 @@ public class Item {
     private int itemPrice;
     private int itemCount;
 
-    public Item(FileDto fileDto, String filePath, String category) {
+    public Item(FileDto fileDto, String url, String category) {
         Item item = new Item();
         this.itemName = fileDto.getItemName();
-        this.itemPath = filePath;
+        this.itemPath = url;
         this.itemPrice = fileDto.getItemPrice();
         this.itemCount = fileDto.getItemCount();
         this.categoryType = CategoryEnum.valueOf(category);
@@ -35,8 +35,8 @@ public class Item {
 
     }
 
-    public static Item createItem(FileDto fileDto, String filePath, String category) {
-        return new Item(fileDto, filePath, category);
+    public static Item createItem(FileDto fileDto, String url, String category) {
+        return new Item(fileDto, url, category);
     }
 
     public void modifyItem(FileDto fileDto, String filePath) {

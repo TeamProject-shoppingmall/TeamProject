@@ -74,7 +74,7 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseEntity<TokenDto> login(MemberLoginDto memberLoginDto, HttpServletResponse response) {
+    public ResponseEntity<String> login(MemberLoginDto memberLoginDto, HttpServletResponse response) {
         if (StringUtils.isBlank(memberLoginDto.getMemberId())) {
             throw new EmptyValueException("아이디가 입력되지 않았습니다.");
         }
@@ -106,7 +106,7 @@ public class MemberService {
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
 
-            return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+            return new ResponseEntity<>(tokenDto.getAccessToken(), HttpStatus.OK);
         } else {
             throw new PwDoesNotMatched("비밀번호가 일치하지 않습니다.");
         }

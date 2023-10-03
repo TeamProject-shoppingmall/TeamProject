@@ -39,9 +39,9 @@ public class MemberController{
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody MemberLoginDto memberLoginDto, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody MemberLoginDto memberLoginDto, HttpServletResponse response) {
         log.info("controller login");
-        ResponseEntity<TokenDto> login = memberService.login(memberLoginDto, response);
+        ResponseEntity<String> login = memberService.login(memberLoginDto, response);
         return login;
     }
 

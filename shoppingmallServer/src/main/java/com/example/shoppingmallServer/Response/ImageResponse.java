@@ -11,25 +11,25 @@ import java.io.InputStream;
 public class ImageResponse {
     private String imageName;
     private int imagePrice;
-    private byte[] image;
+    private String imagePath;
     private String errorMessage;
 
-    public ImageResponse(String imageName, int imagePrice, byte[] image) throws FileNotFoundException {
+    public ImageResponse(String imageName, int imagePrice, String imagePath) throws FileNotFoundException {
         this.imageName = imageName;
         this.imagePrice = imagePrice;
-        this.image = image;
+        this.imagePath = imagePath;
         this.errorMessage = null;
     }
 
     public ImageResponse(String errorMessage) {
         this.imageName = null;
         this.imagePrice = 0;
-        this.image = null;
+        this.imagePath = null;
         this.errorMessage = errorMessage;
     }
 
-    public static ImageResponse findImageOne(String imageName, int imagePrice, byte[] image) throws FileNotFoundException {
-        return new ImageResponse(imageName,imagePrice,image);
+    public static ImageResponse findImageOne(String imageName, int imagePrice, String imagePath) throws FileNotFoundException {
+        return new ImageResponse(imageName,imagePrice,imagePath);
     }
 
     public static ImageResponse getErrorMessage(String errorMessage) {
