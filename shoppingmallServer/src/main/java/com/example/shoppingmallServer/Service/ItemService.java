@@ -94,8 +94,8 @@ public class ItemService {
         }
     }
 
-    public ResponseEntity<ImageResponse> findOneById(int itemKey) throws IOException {
-        Item item = itemRepository.findOneById(itemKey);
+    public ResponseEntity<ImageResponse> findOneByImageName(String imageName) throws IOException {
+        Item item = itemRepository.findOneByImageName(imageName);
         if (item == null) {
             throw new EmptyCategoryItem("등록된 상품이 없습니다.");
         }

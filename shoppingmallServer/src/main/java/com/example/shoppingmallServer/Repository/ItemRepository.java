@@ -37,6 +37,11 @@ public class ItemRepository {
         return em.find(Item.class, itemId);
     }
 
+    public Item findOneByImageName(String imageName) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        return queryFactory.selectFrom(item).where(item.itemName.eq(imageName)).fetchOne();
+    }
+
     public ResponseEntity<String> removeItem(Item item) {
         try {
             em.remove(item);
