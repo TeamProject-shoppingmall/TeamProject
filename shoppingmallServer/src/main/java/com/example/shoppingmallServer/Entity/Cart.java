@@ -2,6 +2,7 @@ package com.example.shoppingmallServer.Entity;
 
 import com.example.shoppingmallServer.Dto.CartDto;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
+@Getter
 public class Cart {
     @Id
     @GeneratedValue

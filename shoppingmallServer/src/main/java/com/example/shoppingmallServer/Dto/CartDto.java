@@ -2,6 +2,7 @@ package com.example.shoppingmallServer.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -10,14 +11,17 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class CartDto {
-    private int memberKey;
-
     private int itemKey;
 
     private int cartCount;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime cartDate;
+
+    public CartDto(int itemKey, int cartCount) {
+        this.itemKey = itemKey;
+        this.cartCount = cartCount;
+        this.cartDate = LocalDateTime.now();
+    }
 }

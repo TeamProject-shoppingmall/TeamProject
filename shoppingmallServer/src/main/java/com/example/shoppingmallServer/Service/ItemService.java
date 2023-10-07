@@ -78,29 +78,18 @@ public class ItemService {
         List<ImageResponse> imageAll = new ArrayList<>();
 
         for (Item item1: item) {
-            imageAll.add(ImageResponse.findImageOne(item1.getItemName(), item1.getItemPrice(), item1.getItemPath()));
+            imageAll.add(ImageResponse.findImageOne(item1.getItemKey(), item1.getItemName(), item1.getItemPrice(), item1.getItemPath()));
         }
         return new ResponseEntity<>(imageAll, HttpStatus.OK);
     }
 
-    public byte[] getImageDataFromPath(String imagePath) throws IOException {
-        Path path = Paths.get(imagePath);
-        Resource imageResource = new FileSystemResource((path.toFile()));
-
-        if (imageResource.exists()) {
-            return imageResource.getContentAsByteArray();
-        } else {
-            throw new FileNotFoundException("상품 이미지가 존재하지 않습니다.");
-        }
-    }
-
-    public ResponseEntity<ImageResponse> findOneByImageName(String imageName) throws IOException {
-        Item item = itemRepository.findOneByImageName(imageName);
+    public ResponseEntity<ImageResponse> findOneById(int itemKey) throws IOException {
+        Item item = itemRepository.findOneById(itemKey);
         if (item == null) {
             throw new EmptyCategoryItem("등록된 상품이 없습니다.");
         }
 
-        return new ResponseEntity<>(ImageResponse.findImageOne(item.getItemName(), item.getItemPrice(), item.getItemPath()), HttpStatus.OK);
+        return new ResponseEntity<>(ImageResponse.findImageOne(item.getItemKey(), item.getItemName(), item.getItemPrice(), item.getItemPath()), HttpStatus.OK);
     }
 
 

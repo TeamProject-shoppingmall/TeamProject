@@ -45,9 +45,24 @@ public class CartRepository {
             return queryFactory.selectFrom(cart).where(cart.cartKey.eq(cartKey)).where(cart.memberKey.memberKey.eq(memberKey)).fetchOne();
     }
 
+    public List<Cart> findAllById(int memberKey) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        return queryFactory.selectFrom(cart).where(cart.memberKey.memberKey.eq(memberKey)).fetch();
+    }
+
     public ResponseEntity<String> remove(Cart cart) {
         try {
             em.remove(cart);
+            return new ResponseEntity<>("장바구니를 삭제했습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            throw new FailedRemoveException("장바구니 삭제에 실패했습니다.");
+        }
+    }
+
+    public ResponseEntity<String> removeAll(List<Integer> keys) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        try {
+            queryFactory.delete(cart).where(cart.cartKey.in(keys)).execute();
             return new ResponseEntity<>("장바구니를 삭제했습니다.", HttpStatus.OK);
         } catch (Exception e) {
             throw new FailedRemoveException("장바구니 삭제에 실패했습니다.");

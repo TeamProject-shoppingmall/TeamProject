@@ -31,9 +31,9 @@ public class ItemController {
         return itemService.findAllByCategory(category);
     }
 
-    @GetMapping("/findOneByImageName")
-    public ResponseEntity<ImageResponse> findOneByImageName(@RequestParam("imageName") String imageName) throws IOException {
-        return itemService.findOneByImageName(imageName);
+    @GetMapping("/findOneById")
+    public ResponseEntity<ImageResponse> findOneById(@RequestParam("itemKey") int itemKey) throws IOException {
+        return itemService.findOneById(itemKey);
     }
 
     @PutMapping("modify")
