@@ -2,7 +2,6 @@ package com.example.shoppingmallServer;
 
 import com.example.shoppingmallServer.Dto.MemberDto;
 import com.example.shoppingmallServer.Enum.GenderEnum;
-import com.example.shoppingmallServer.Enum.MemberEnum;
 import com.example.shoppingmallServer.Repository.MemberRepository;
 import com.example.shoppingmallServer.Service.MemberService;
 import org.junit.jupiter.api.Test;

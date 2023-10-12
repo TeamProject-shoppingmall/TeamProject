@@ -28,12 +28,12 @@ public class MemberController{
         log.info("Controller regularPost");
         return memberService.regularJoin(memberDto);
     }
-    @PostMapping("/kakaoJoin")
+    @PostMapping("/kakaoLogin")
     public String kakaoJoin() {
         return "home";
     }
 
-    @PostMapping("/googleJoin")
+    @PostMapping("/googleLogin")
     public String googleJoin() {
         return "home";
     }

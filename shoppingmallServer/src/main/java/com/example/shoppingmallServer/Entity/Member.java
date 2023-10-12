@@ -2,7 +2,6 @@ package com.example.shoppingmallServer.Entity;
 
 import com.example.shoppingmallServer.Dto.MemberDto;
 import com.example.shoppingmallServer.Enum.GenderEnum;
-import com.example.shoppingmallServer.Enum.MemberEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -13,12 +12,6 @@ public class Member {
     @GeneratedValue
     @Column(name="member_key")
     private int memberKey;
-
-    private MemberEnum regularMember;
-
-    private MemberEnum kakaoMember;
-
-    private MemberEnum googleMember;
 
     private String memberId;
 
@@ -39,9 +32,6 @@ public class Member {
     private String addrDetail;
 
     private Member(MemberDto memberDto) {
-        this.regularMember = memberDto.getRegularMember();
-        this.kakaoMember = memberDto.getKakaoMember();
-        this.googleMember = memberDto.getGoogleMember();
         this.memberId = memberDto.getMemberId();
         this.memberPw = memberDto.getMemberPw();
         this.memberName = memberDto.getMemberName();
@@ -62,9 +52,6 @@ public class Member {
     }
 
     public void modifyMember(MemberDto memberDto) {
-        this.regularMember = memberDto.getRegularMember();
-        this.kakaoMember = memberDto.getKakaoMember();
-        this.googleMember = memberDto.getGoogleMember();
         this.memberId = memberDto.getMemberId();
         this.memberPw = memberDto.getMemberPw();
         this.memberName = memberDto.getMemberName();
