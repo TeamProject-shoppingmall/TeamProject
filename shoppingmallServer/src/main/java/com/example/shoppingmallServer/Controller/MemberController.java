@@ -1,5 +1,6 @@
 package com.example.shoppingmallServer.Controller;
 
+import com.example.shoppingmallServer.Dto.KakaoDto;
 import com.example.shoppingmallServer.Dto.MemberDto;
 import com.example.shoppingmallServer.Dto.MemberLoginDto;
 import com.example.shoppingmallServer.Dto.TokenDto;
@@ -25,12 +26,14 @@ public class MemberController{
     private final MemberService memberService;
     @PostMapping("/regularJoin")
     public ResponseEntity<String> regularJoin(@RequestBody MemberDto memberDto) {
-        log.info("Controller regularPost");
+        log.info("Controller regularJoin");
         return memberService.regularJoin(memberDto);
     }
-    @PostMapping("/kakaoLogin")
-    public String kakaoJoin() {
-        return "home";
+    @GetMapping("/kakaoLogin")
+    public ResponseEntity<KakaoDto> kakaoJoin(@RequestParam("code") String code) throws Exception {
+        log.info("Controller kakaoLogin");
+        String kakaoAccessToken = memberService.getKakaoAccessToken(code);
+        return memberService.receiveKakaoUser(kakaoAccessToken);
     }
 
     @PostMapping("/googleLogin")

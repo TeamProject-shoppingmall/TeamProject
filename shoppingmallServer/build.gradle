@@ -25,6 +25,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -32,6 +33,7 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'com.google.code.gson:gson:2.8.7'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -45,7 +47,7 @@ dependencies {
 	dependencies {
 		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	}
-
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 }
 
 tasks.named('test') {
