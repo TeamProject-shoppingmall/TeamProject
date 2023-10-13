@@ -1,9 +1,6 @@
 package com.example.shoppingmallServer.Controller;
 
-import com.example.shoppingmallServer.Dto.KakaoDto;
-import com.example.shoppingmallServer.Dto.MemberDto;
-import com.example.shoppingmallServer.Dto.MemberLoginDto;
-import com.example.shoppingmallServer.Dto.TokenDto;
+import com.example.shoppingmallServer.Dto.*;
 import com.example.shoppingmallServer.Entity.Member;
 import com.example.shoppingmallServer.Service.MemberService;
 import jakarta.servlet.http.Cookie;
@@ -36,10 +33,11 @@ public class MemberController{
         return memberService.receiveKakaoUser(kakaoAccessToken);
     }
 
-    @PostMapping("/googleLogin")
-    public String googleLogin() {
+    @GetMapping("/googleLogin")
+    public ResponseEntity<GoogleDto> googleLogin(@RequestParam("code") String code) throws Exception {
         log.info("Controller googleLogin");
-        return "home";
+        String googleAccessToken = memberService.getGoogleAccessToken(code);
+        return memberService.receiveGoogleUser(googleAccessToken);
     }
 
     @PostMapping("/login")

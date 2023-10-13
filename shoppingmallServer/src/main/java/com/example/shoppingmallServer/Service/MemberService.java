@@ -1,9 +1,6 @@
 package com.example.shoppingmallServer.Service;
 
-import com.example.shoppingmallServer.Dto.KakaoDto;
-import com.example.shoppingmallServer.Dto.MemberDto;
-import com.example.shoppingmallServer.Dto.MemberLoginDto;
-import com.example.shoppingmallServer.Dto.TokenDto;
+import com.example.shoppingmallServer.Dto.*;
 import com.example.shoppingmallServer.Entity.Member;
 import com.example.shoppingmallServer.Entity.RefreshToken;
 import com.example.shoppingmallServer.Exception.*;
@@ -37,10 +34,17 @@ public class MemberService {
 
     @Value("${kakao-client-id}")
     private String KAKAO_CLIENT_KEY;
-    String access_Token="";
-    String refresh_Token ="";
-    String authorizeURL = "https://kauth.kakao.com";
-    String resourceURL = "https://kapi.kakao.com";
+
+    @Value("${google-client-id}")
+    private String GOOGLE_CLIENT_KEY;
+
+    @Value("${google-secret-pw}")
+    private String GOOGLE_SECRET_PW;
+
+    String kakaoAuthorizeURL = "https://kauth.kakao.com";
+    String kakaoResourceURL = "https://kapi.kakao.com";
+    String googleAuthorizeURL = "https://oauth2.googleapis.com";
+    String googleResourceURL = "https://www.googleapis.com";
 
     @Transactional
     public ResponseEntity<String> regularJoin(MemberDto memberDto) {
@@ -73,7 +77,7 @@ public class MemberService {
         }
 
         try {
-            WebClient webClient = WebClient.builder().baseUrl(authorizeURL).build();
+            WebClient webClient = WebClient.builder().baseUrl(kakaoAuthorizeURL).build();
             String token = webClient.get()
                     .uri("/oauth/token?grant_type=authorization_code&client_id=" + KAKAO_CLIENT_KEY
                             + "&redirect_uri=http://localhost:8080/member/kakaoLogin"
@@ -86,19 +90,44 @@ public class MemberService {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(token);
 
-            access_Token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
+            String accessToken = element.getAsJsonObject().get("access_token").getAsString();
+//          String refreshToken = element.getAsJsonObject().get("refresh_token").getAsString();
 
-            return access_Token;
+            return accessToken;
         } catch (Exception e) {
             throw new FailedLoginException("토큰을 가져오는데 실패헀습니다.");
+        }
+    }
+
+    public String getGoogleAccessToken(String code) throws Exception {
+        if(code == null) new Exception("Failed APi Call");
+        try {
+            WebClient webClient = WebClient.builder().baseUrl(googleAuthorizeURL).build();
+            String token = webClient.post()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/token")
+                            .queryParam("grant_type", "authorization_code")
+                            .queryParam("code", code)
+                            .queryParam("client_id", GOOGLE_CLIENT_KEY)
+                            .queryParam("client_secret", GOOGLE_SECRET_PW)
+                            .queryParam("redirect_uri", "http://localhost:8080/member/googleLogin")
+                            .build())
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            JsonParser jsonParser = new JsonParser();
+            JsonElement jsonElement = jsonParser.parse(token);
+            String accessToken = jsonElement.getAsJsonObject().get("access_token").getAsString();
+            return accessToken;
+        } catch (Exception e) {
+            throw new Exception("API call failed");
         }
     }
 
     public ResponseEntity<KakaoDto> receiveKakaoUser(String token) throws Exception {
         if(token == null) throw new Exception("failed get Id_Token");
         try {
-            WebClient webClient = WebClient.builder().baseUrl(resourceURL).defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
+            WebClient webClient = WebClient.builder().baseUrl(kakaoResourceURL).defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
 
             String resource = webClient.get()
                     .uri("/v2/user/me")
@@ -124,6 +153,24 @@ public class MemberService {
         } catch (Exception e) {
             throw new Exception("API call failed");
         }
+    }
+    public ResponseEntity<GoogleDto> receiveGoogleUser(String token) {
+        WebClient webClient = WebClient.builder().baseUrl(googleResourceURL).defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
+        String resource = webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/oauth2/v2/userinfo")
+                        .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        System.out.println(resource);
+        JsonParser jsonParser = new JsonParser();
+        JsonElement jsonElement = jsonParser.parse(resource);
+        String email = jsonElement.getAsJsonObject().get("email").getAsString();
+        String name = jsonElement.getAsJsonObject().get("name").getAsString();
+
+        GoogleDto googleDto = new GoogleDto(name, email);
+        return new ResponseEntity<>(googleDto, HttpStatus.OK);
     }
 
     @Transactional
