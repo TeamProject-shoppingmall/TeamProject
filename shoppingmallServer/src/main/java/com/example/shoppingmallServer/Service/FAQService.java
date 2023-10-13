@@ -4,8 +4,10 @@ import com.example.shoppingmallServer.Dto.FAQDto;
 import com.example.shoppingmallServer.Dto.FAQModifyDto;
 import com.example.shoppingmallServer.Entity.FAQ;
 import com.example.shoppingmallServer.Entity.Member;
+import com.example.shoppingmallServer.Exception.EmptyValueException;
 import com.example.shoppingmallServer.Exception.FailedRemoveException;
 import com.example.shoppingmallServer.Exception.NotFoundException;
+import com.example.shoppingmallServer.JWT.JwtTokenProvider;
 import com.example.shoppingmallServer.Repository.FAQRepository;
 import com.example.shoppingmallServer.Repository.MemberRepository;
 import com.example.shoppingmallServer.Response.FAQAllResponse;
@@ -26,14 +28,18 @@ import java.util.List;
 public class FAQService {
     private final FAQRepository faqRepository;
     private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public ResponseEntity<String> insert(FAQDto faqDto) {
-        Member oneById = memberRepository.findOneById(faqDto.getMemberKey());
-        if (oneById == null) {
-            throw new NotFoundException("회원을 찾을 수 없습니다.");
+    public ResponseEntity<String> insert(FAQDto faqDto, String accessToken) {
+        String idFromToken = jwtTokenProvider.getIdFromToken(accessToken);
+        Member findMember = memberRepository.findOneByUserId(idFromToken);
+
+        if (findMember == null) {
+            throw new EmptyValueException("회원 정보가 존재하지 않습니다.");
         }
-        FAQ faq = FAQ.Create(faqDto, oneById);
+
+        FAQ faq = FAQ.Create(faqDto, findMember);
         return faqRepository.insert(faq);
     }
 
@@ -58,24 +64,38 @@ public class FAQService {
     }
 
     @Transactional
-    public ResponseEntity<String> remove(int faqKey, int memberKey) {
+    public ResponseEntity<String> remove(int faqKey, String accessToken) {
+        String idFromToken = jwtTokenProvider.getIdFromToken(accessToken);
+        Member findMember = memberRepository.findOneByUserId(idFromToken);
+
+        if (findMember == null) {
+            throw new EmptyValueException("회원 정보가 존재하지 않습니다.");
+        }
+
         FAQ oneById = faqRepository.findOneById(faqKey);
         if (oneById == null) {
             throw new NotFoundException("등록된 문의가 없습니다.");
         }
-        if (oneById.getMemberKey().getMemberKey() != memberKey) {
+        if (oneById.getMemberKey().getMemberKey() != findMember.getMemberKey()) {
             throw new FailedRemoveException("작성자 외에는 삭제를 할 수 없습니다.");
         }
         return faqRepository.remove(oneById);
     }
 
     @Transactional
-    public ResponseEntity<String> modify(int faqKey, int memberKey, FAQModifyDto faqModifyDto) {
+    public ResponseEntity<String> modify(int faqKey, String accessToken, FAQModifyDto faqModifyDto) {
+        String idFromToken = jwtTokenProvider.getIdFromToken(accessToken);
+        Member findMember = memberRepository.findOneByUserId(idFromToken);
+
+        if (findMember == null) {
+            throw new EmptyValueException("회원 정보가 존재하지 않습니다.");
+        }
+
         FAQ oneById = faqRepository.findOneById(faqKey);
         if (oneById == null) {
             throw new NotFoundException("등록된 문의가 없습니다.");
         }
-        if (oneById.getMemberKey().getMemberKey() != memberKey) {
+        if (oneById.getMemberKey().getMemberKey() != findMember.getMemberKey()) {
             throw new FailedRemoveException("작성자 외에는 삭제를 할 수 없습니다.");
         }
         oneById.Modify(faqModifyDto);

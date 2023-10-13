@@ -18,8 +18,8 @@ public class FAQController {
     private final FAQService faqService;
 
     @PostMapping("/insert")
-    public ResponseEntity<String> insert(@RequestBody FAQDto faqDto) {
-        return faqService.insert(faqDto);
+    public ResponseEntity<String> insert(@RequestHeader("Authorization") String accessToken, @RequestBody FAQDto faqDto) {
+        return faqService.insert(faqDto, accessToken);
     }
 
     @GetMapping("/findAll")
@@ -32,12 +32,12 @@ public class FAQController {
         return faqService.findOneById(key);
     }
     @PostMapping("/remove")
-    public ResponseEntity<String> remove(@RequestParam("faqKey") int faqKey, @RequestParam("memberKey") int memberKey) {
-        return faqService.remove(faqKey, memberKey);
+    public ResponseEntity<String> remove(@RequestParam("faqKey") int faqKey, @RequestHeader("Authorization") String accessToken) {
+        return faqService.remove(faqKey, accessToken);
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<String> modify(@RequestParam("faqKey") int faqKey, @RequestParam("memberKey") int memberKey, @RequestBody FAQModifyDto faqModifyDto) {
-        return faqService.modify(faqKey, memberKey, faqModifyDto);
+    public ResponseEntity<String> modify(@RequestParam("faqKey") int faqKey, @RequestHeader("Authorization") String accessToken, @RequestBody FAQModifyDto faqModifyDto) {
+        return faqService.modify(faqKey, accessToken, faqModifyDto);
     }
 }

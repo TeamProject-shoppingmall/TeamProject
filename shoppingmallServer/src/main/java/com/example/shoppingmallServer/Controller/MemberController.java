@@ -30,14 +30,15 @@ public class MemberController{
         return memberService.regularJoin(memberDto);
     }
     @GetMapping("/kakaoLogin")
-    public ResponseEntity<KakaoDto> kakaoJoin(@RequestParam("code") String code) throws Exception {
+    public ResponseEntity<KakaoDto> kakaoLogin(@RequestParam("code") String code) throws Exception {
         log.info("Controller kakaoLogin");
         String kakaoAccessToken = memberService.getKakaoAccessToken(code);
         return memberService.receiveKakaoUser(kakaoAccessToken);
     }
 
     @PostMapping("/googleLogin")
-    public String googleJoin() {
+    public String googleLogin() {
+        log.info("Controller googleLogin");
         return "home";
     }
 
@@ -49,13 +50,13 @@ public class MemberController{
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<String> memberModify(@RequestParam("memberId") String memberId, @RequestBody MemberDto memberDto) throws Exception {
+    public ResponseEntity<String> memberModify(@RequestHeader("Authorization") String accessToken, @RequestBody MemberDto memberDto) throws Exception {
         log.info("controller modify");
-        return memberService.modify(memberId, memberDto);
+        return memberService.modify(accessToken, memberDto);
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<String> remove(@RequestParam("memberKey") int userKey) {
-        return memberService.remove(userKey);
+    public ResponseEntity<String> remove(@RequestHeader("Authorization") String accessToken) {
+        return memberService.remove(accessToken);
     }
 }

@@ -127,20 +127,21 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseEntity<String> modify(String memberId, MemberDto memberDto) {
+    public ResponseEntity<String> modify(String accessToken, MemberDto memberDto) {
         if (StringUtils.isBlank(memberDto.getMemberId())) {
             throw new EmptyValueException("아이디가 입력되지 않았습니다.");
         }
 
-        Member searchMember = memberRepository.findOneByUserId(memberId);
+        String idFromToken = jwtTokenProvider.getIdFromToken(accessToken);
+        Member oneByUserId = memberRepository.findOneByUserId(idFromToken);
 
-        if (searchMember == null) {
-            throw new NotFoundException("아이디가 존재하지 않습니다.");
+        if (oneByUserId == null) {
+            throw new NotFoundException("회원 정보가 없습니다.");
         }
 
-        searchMember.modifyMember(memberDto);
+        oneByUserId.modifyMember(memberDto);
 
-        return memberRepository.modifyMember(searchMember);
+        return memberRepository.modifyMember(oneByUserId);
     }
 
     @Transactional
@@ -181,16 +182,13 @@ public class MemberService {
             throw new PwDoesNotMatched("비밀번호가 일치하지 않습니다.");
         }
     }
-    private void setHeader(HttpServletResponse response, TokenDto tokenDto) {
-        response.addHeader(jwtTokenProvider.ACCESS_TOKEN, tokenDto.getAccessToken());
-        response.addHeader(jwtTokenProvider.REFRESH_TOKEN, tokenDto.getRefreshToken());
-    }
     @Transactional
-    public ResponseEntity<String> remove(int memberKey) {
-        Member oneById = memberRepository.findOneById(memberKey);
-        if (oneById == null) {
+    public ResponseEntity<String> remove(String accessToken) {
+        String idFromToken = jwtTokenProvider.getIdFromToken(accessToken);
+        Member oneByUserId = memberRepository.findOneByUserId(idFromToken);
+        if (oneByUserId == null) {
             throw new NotFoundException("회원 정보가 없습니다.");
         }
-        return memberRepository.remove(oneById);
+        return memberRepository.remove(oneByUserId);
     }
 }

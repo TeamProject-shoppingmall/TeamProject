@@ -104,6 +104,10 @@ public class CartService {
         String idFromToken = jwtTokenProvider.getIdFromToken(accessToken);
         Member findMember = memberRepository.findOneByUserId(idFromToken);
 
+        if (findMember == null) {
+            throw new EmptyValueException("회원 정보가 존재하지 않습니다.");
+        }
+
         List<Cart> allById = cartRepository.findAllById(findMember.getMemberKey());
 
         if (allById == null) {
