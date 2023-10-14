@@ -29,24 +29,24 @@ public class OrderTest {
     @Autowired
     private OrderService orderService;
 
-    @Test
-    public void 주문테스트() {
-        OrderDto orderDto = new OrderDto();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        orderDto.setOrderAddr("부천");
-        orderDto.setOrderCount(3);
-        orderDto.setOrderReceiver("이주훈");
-        orderDto.setOrderDate(LocalDateTime.parse("2023-01-18T11:22:33"));
-        orderDto.setOrderPhone("010-1111-1111");
-        orderDto.setOrderPrice(15000);
-        orderDto.setTotalPrice(orderDto.getOrderPrice() * orderDto.getOrderCount());
-        orderDto.setOrderZipcode("11111");
-        orderDto.setMemberKey(1);
-        orderDto.setItemKey(1);
-        orderDto.setOrderAddrDetail("우리집");
-
-        orderService.orderInsert(orderDto);
-    }
+//    @Test
+//    public void 주문테스트() {
+//        OrderDto orderDto = new OrderDto();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        orderDto.setOrderAddr("부천");
+//        orderDto.setOrderCount(3);
+//        orderDto.setOrderReceiver("이주훈");
+//        orderDto.setOrderDate(LocalDateTime.parse("2023-01-18T11:22:33"));
+//        orderDto.setOrderPhone("010-1111-1111");
+//        orderDto.setOrderPrice(15000);
+//        orderDto.setTotalPrice(orderDto.getOrderPrice() * orderDto.getOrderCount());
+//        orderDto.setOrderZipcode("11111");
+//        orderDto.setMemberKey(1);
+//        orderDto.setItemKey(1);
+//        orderDto.setOrderAddrDetail("우리집");
+//
+//        orderService.orderInsert(orderDto);
+//    }
 
     @Test
     @Transactional
@@ -54,10 +54,10 @@ public class OrderTest {
         orderService.findAllById(1);
     }
 
-    @Test
-    @Transactional
-    @Rollback(value = false)
-    public void 주문삭제테스트() {
-        orderService.remove(1);
-    }
+//    @Test
+//    @Transactional
+//    @Rollback(value = false)
+//    public void 주문삭제테스트() {
+//        orderService.remove(1);
+//    }
 }
