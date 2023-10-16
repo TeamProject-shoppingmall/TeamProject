@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
-
+// 테스트
 @Service
 @RequiredArgsConstructor
 public class MemberService {
