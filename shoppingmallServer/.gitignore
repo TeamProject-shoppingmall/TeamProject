@@ -5,10 +5,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-*.yml
-*.properties
-application.yml
-application.properties
+application-aws-s3.yml
+application-jwt.yml
+application-mysql.yml
+application-oauth2.yml
 
 ### STS ###
 .apt_generated

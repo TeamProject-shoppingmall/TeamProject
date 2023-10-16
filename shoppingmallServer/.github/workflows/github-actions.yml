@@ -1,0 +1,91 @@
+name: CI/CD using github actions & docker
+
+#event trigger main 브렌치의 push 됐을 때 실행
+on:
+  push:
+    branch: main
+
+permissions:
+  contents: read
+
+# github action 동작 환경
+jobs:
+  CI-CD:
+    runs-on: ubuntu-latest
+    steps:
+#      코드를 빌드하기 전 워크플로우 환경으로 가져올 때 사용한다.
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+#        프로젝트를 build 또는 실행하기 전에 필요한 jdk 환경을 설정하는데 사용한다.
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+#          jdk의 오픈 소스 구현 중 하나
+          distribution: 'temurin'
+
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+              ${{ runner.os }}-gradle-
+
+      - name: make application-mysql.yml
+        if: contains(github.ref, 'main')
+        run: |
+          cd ./src/main/resources
+          touch ./application-mysql.yml
+          echo "${{secrets.MYSQL}}" > ./application-mysql.yml
+        shell: bash
+
+      - name: make application-oauth2.yml
+        if: contains(github.ref, 'main')
+        run: |
+          cd ./src/main/resources
+          touch ./application-oauth2.yml
+          echo "${{secrets.OAUTH2}}" > ./application-oauth2.yml
+        shell: bash
+
+      - name: make application-jwt.yml
+        if: contains(github.ref, 'main')
+        run: |
+          cd ./src/main/resources
+          touch ./application-jwt.yml
+          echo "${{secrets.JWT}}" > ./application-jwt.yml
+        shell: bash
+
+      - name: make application-aws-s3.yml
+        if: contains(github.ref, 'main')
+        run: |
+          cd ./src/main/resources
+          touch ./application-aws-s3.yml
+          echo "${{secrets.AWS_S3}}" > ./application-aws-s3.yml
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Docker build & push to main
+        if: contains(github.ref, 'main')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f Dockerfile-dev -t ${{ secrets.DOCKER_USERNAME }}/docker-test-prod .
+          docker push ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+
+      - name: Deploy to main
+        uses: appleboy/ssh-action@main
+        id: deploy-main
+        if: contains(github.ref, 'main')
+        with:
+          host: ${{ secrets.HOST_MAIN }} # EC2 퍼블릭 IPv4 DNS
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          envs: GITHUB_SHA
+          script: |
+            sudo docker ps
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker run -d -p 8082:8082 ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker image prune -f
