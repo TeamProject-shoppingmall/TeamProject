@@ -32,14 +32,20 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
 
-    @Value("${kakao-client-id}")
+    @Value("${kakao.client.id}")
     private String KAKAO_CLIENT_KEY;
 
-    @Value("${google-client-id}")
+    @Value("${google.client.id}")
     private String GOOGLE_CLIENT_KEY;
 
-    @Value("${google-secret-pw}")
+    @Value("${google.secret.pw}")
     private String GOOGLE_SECRET_PW;
+
+    @Value("${kakao.redirect.url}")
+    private String KAKAO_REDIRECT_URL;
+
+    @Value("${google.redirect.url}")
+    private String GOOGLE_REDIRECT_URL;
 
     String kakaoAuthorizeURL = "https://kauth.kakao.com";
     String kakaoResourceURL = "https://kapi.kakao.com";
@@ -80,7 +86,7 @@ public class MemberService {
             WebClient webClient = WebClient.builder().baseUrl(kakaoAuthorizeURL).build();
             String token = webClient.get()
                     .uri("/oauth/token?grant_type=authorization_code&client_id=" + KAKAO_CLIENT_KEY
-                            + "&redirect_uri=http://localhost:8080/member/kakaoLogin"
+                            + "&redirect_uri=" + KAKAO_REDIRECT_URL
                             + "&code=" + code)
                     .retrieve()
                     .bodyToMono(String.class)
@@ -110,7 +116,7 @@ public class MemberService {
                             .queryParam("code", code)
                             .queryParam("client_id", GOOGLE_CLIENT_KEY)
                             .queryParam("client_secret", GOOGLE_SECRET_PW)
-                            .queryParam("redirect_uri", "http://localhost:8080/member/googleLogin")
+                            .queryParam("redirect_uri", GOOGLE_REDIRECT_URL)
                             .build())
                     .retrieve()
                     .bodyToMono(String.class)

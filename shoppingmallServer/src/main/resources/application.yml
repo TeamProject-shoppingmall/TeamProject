@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: mysql, jwt, oauth2, aws-s3
   jpa:
     hibernate:
       ddl-auto: none
