@@ -3,7 +3,8 @@ name: CI/CD using github actions & docker
 #event trigger main 브렌치의 push 됐을 때 실행
 on:
   push:
-    branch: main
+    branches:
+      -main
 
 permissions:
   contents: read
