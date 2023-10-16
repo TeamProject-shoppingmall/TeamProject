@@ -4,7 +4,7 @@ name: CI/CD using github actions & docker
 on:
   push:
     branches:
-      -main
+      - main
 
 permissions:
   contents: read
