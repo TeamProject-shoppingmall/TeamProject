@@ -77,7 +77,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
 
       - name: Deploy to main
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         id: deploy-main
         if: contains(github.ref, 'main')
         with:
