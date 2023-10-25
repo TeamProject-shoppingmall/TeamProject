@@ -1,6 +1,10 @@
 spring:
-  profiles:
-    active: mysql, jwt, oauth2, aws-s3
+  config:
+    import:
+      - application-mysql.yml
+      - application-jwt.yml
+      - application-oauth2.yml
+      - application-aws-s3.yml
   jpa:
     hibernate:
       ddl-auto: none
