@@ -7,7 +7,7 @@ spring:
       - application-aws-s3.yml
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
